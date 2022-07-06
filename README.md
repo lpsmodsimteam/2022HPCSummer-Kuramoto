@@ -9,7 +9,7 @@ This demonstration of synchronization relies only on [SST-Core](https://github.c
 
 
 # Objectives
-- [ ] literature search for instances of this problem
+- [x] literature search for instances of this problem
 - [ ] identify underlying mathematical or logical conditions that trigger this problem in distributed systems
 - [ ] identify minimum features for C++ components needed to create this problem
 - [ ] identify minimum size of graph (links, components) to observe the issue

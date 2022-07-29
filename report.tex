@@ -89,12 +89,19 @@ Will properly explain these works later:
 Two primary methods at the moment:
 
 Goal: Determine if the oscillators have the same frequency and are in phase.
-Assumption: The simulation keeps track of the oscillators frequency.
+Assumption: The simulation keeps track of the oscillators frequency.\newline
 
-First method:
+\noindent First method:
+
 During a simulation, you can sample one period of data for a set of oscillators. The sampling will begin at the first peak that the simulation encounters, this will be the reference oscillator and its phase will be zero. As time steps forward, the time in which the first peak occurs for every oscillator in the period of time will be recorded. 
 
-Once the period is over, the collected data is analyzed. The phase difference is 
+Once the period is over, the collected data is analyzed. The phase difference is calculated for each oscillator by subtracting the time in which its first peak occurred by the reference oscillator's peak. This value is multiped by two pi to give the phase angle.
+
+With the array/vector of phase angles between every oscillator and the reference, you can compare the phase angles of all the oscillators in quadratic time (n squared). Oscillators are synchronized if the phase angle is zero (in-phase) or pi (anti-phase).\newline
+
+\noindent Second Method:
+
+Combine the oscillators and see if the amplitude is equal to the summation of all of the oscillators' amplitudes. This method may required converting analog signals to digital first. This can only detect global synchronization between the oscillators.
 
 W.I.P.
 	

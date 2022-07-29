@@ -1,0 +1,109 @@
+\documentclass{article}
+
+%graphics
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+
+\usepackage{xfrac}
+\usepackage{float}
+
+\usepackage{listings}
+\lstset{
+	basicstyle=\ttfamily,
+	columns=fullflexible,
+	frame=single,
+	breaklines=true,
+	postbreak=\mbox{\textcolor{black}{$\hookrightarrow$}\space},
+}
+
+% margins of 1 inch:
+\setlength{\topmargin}{-.5in}
+\setlength{\textheight}{9.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+
+% RELEVANT LINKS and notes
+%
+%	https://en.wikipedia.org/wiki/Random_early_detection
+%	https://en.wikipedia.org/wiki/TCP_global_synchronization
+%	https://en.wikipedia.org/wiki/Discrete-event_simulation
+%	http://sst-simulator.org/
+%	https://en.wikipedia.org/wiki/Tail_drop
+% 
+% 	Define link utilization, transmission rates,
+
+\begin{document}
+
+    % https://stackoverflow.com/a/3408428/1164295
+    \begin{minipage}[h]{\textwidth}
+        \title{2022 Future Computing Summer Internship Project:\\Detecting if simulated oscillators are following the Kuramoto Model by determining if the oscillators experience synchronization.}
+        \author{Nicholas Schantz}
+        \date{\today}
+            \maketitle
+        \begin{abstract}
+        	W.I.P. 
+        	
+           % \href{https://en.wikipedia.org/wiki/TCP_global_synchronization}{TCP Global Synchronization} is a networking problem in which a burst of traffic in a network causes multiple clients to drop packets and limit their transmission rates. Afterwards, the clients begin to increase their transmission rates consecutively which results in more packet loss and transmission limiting, which creates a loop of this activity. This research addresses the question as to whether metrics exist to determine if this problem has occurred in a simulated network. These metrics are useful for network architects who are unaware of this problem, because they can better understand how to avoid causing this problem in a network simulation. The \href{https://en.wikipedia.org/wiki/Discrete-event_simulation}{discrete-event simulator} (DES) framework called \href{http://sst-simulator.org/}{Structural Simulation Toolkit} (SST) is used to simulate this activity and find a metric. An SST model is created of a simple \href{https://en.wikipedia.org/wiki/Reliability_(computer_networking}{reliable network} where components send data to a receiving component who will drop data when its queue is filled. Global synchronization is caused in the simulation and data is collected from the model's components to determine metrics for detecting global synchronization. A resulting metric found is to look in a window of activity when packet loss occurs and measure the number of sending components that have reduced their transmission rates.
+
+        \end{abstract}
+    \end{minipage}
+
+\ \\
+
+
+%\maketitle
+
+\section{Project Description} % what problem is being addressed? 
+
+The challenge addressed by this work is to determine a correct and efficient way to analyze multiple oscillators and determine which oscillators are synchronized and which are not. The purpose for this is to detect synchronization of oscillators in simulation. This problem is being looked at due to the Kuramoto Model, which is a mathematical model that describes how coupled oscillators may synchronize over time. If this behavior is unintended and system architects are unaware of it, this can become a problem. In this case, an effort is put forward to detecting which oscillators are synchronized in a set and which are not.
+
+%The challenge addressed by this work is to model the networking problem TCP Global Synchronization in a discrete-event simulator. The problem is studied to understand the mathematic conditions that create this problem. This information is used to create a SST model and simulate it to identify metrics to detect that the problem has occurred in simulated systems.
+
+\section{Motivation} % Why does this work matter? Who cares? If you're successful, what difference does it make?
+
+
+
+\section{Prior work} % what does this build on?
+Will properly explain these works later:
+
+\begin{itemize}
+	\item Method of detecting synchronization by measuring peak synchronization in multiple signals \cite{biswas_2014}
+	\item Method of detecting synchronization by defining events (such as peaks in signals) and does not require the calculation of phase \cite{quian_2002}
+	\item Comparison of multiple current methods for phase synchronization \cite{yoshinaga_2022}
+\end{itemize}
+
+\section{Running the Model}
+
+\section{Result} % conclusion/summary
+
+Two primary methods at the moment:
+
+Goal: Determine if the oscillators have the same frequency and are in phase.
+Assumption: The simulation keeps track of the oscillators frequency.
+
+First method:
+During a simulation, you can sample one period of data for a set of oscillators. The sampling will begin at the first peak that the simulation encounters, this will be the reference oscillator and its phase will be zero. As time steps forward, the time in which the first peak occurs for every oscillator in the period of time will be recorded. 
+
+Once the period is over, the collected data is analyzed. The phase difference is 
+
+W.I.P.
+	
+
+													
+\section{Future Work}
+W.I.P.
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+\end{document}

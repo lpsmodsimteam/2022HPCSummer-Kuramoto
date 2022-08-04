@@ -4,6 +4,9 @@
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 
+\usepackage{algorithm} 
+\usepackage{algpseudocode} 
+
 \usepackage{xfrac}
 \usepackage{float}
 
@@ -51,7 +54,6 @@
         \date{\today}
             \maketitle
         \begin{abstract}
-        	W.I.P. 
         	
            % \href{https://en.wikipedia.org/wiki/TCP_global_synchronization}{TCP Global Synchronization} is a networking problem in which a burst of traffic in a network causes multiple clients to drop packets and limit their transmission rates. Afterwards, the clients begin to increase their transmission rates consecutively which results in more packet loss and transmission limiting, which creates a loop of this activity. This research addresses the question as to whether metrics exist to determine if this problem has occurred in a simulated network. These metrics are useful for network architects who are unaware of this problem, because they can better understand how to avoid causing this problem in a network simulation. The \href{https://en.wikipedia.org/wiki/Discrete-event_simulation}{discrete-event simulator} (DES) framework called \href{http://sst-simulator.org/}{Structural Simulation Toolkit} (SST) is used to simulate this activity and find a metric. An SST model is created of a simple \href{https://en.wikipedia.org/wiki/Reliability_(computer_networking}{reliable network} where components send data to a receiving component who will drop data when its queue is filled. Global synchronization is caused in the simulation and data is collected from the model's components to determine metrics for detecting global synchronization. A resulting metric found is to look in a window of activity when packet loss occurs and measure the number of sending components that have reduced their transmission rates.
 
@@ -65,50 +67,75 @@
 
 \section{Project Description} % what problem is being addressed? 
 
-The challenge addressed by this work is to determine a correct and efficient way to analyze multiple oscillators and determine which oscillators are synchronized and which are not. The purpose for this is to detect synchronization of oscillators in simulation. This problem is being looked at due to the Kuramoto Model, which is a mathematical model that describes how coupled oscillators may synchronize over time. If this behavior is unintended and system architects are unaware of it, this can become a problem. In this case, an effort is put forward to detecting which oscillators are synchronized in a set and which are not.
+The challenge addressed by this work is to determine a correct and efficient way to analyze multiple oscillators and determine which oscillators are synchronized and which are not. The purpose for this is to detect synchronization of oscillators in simulation. This problem is being looked at due to the Kuramoto Model, which is a mathematical model that describes how coupled oscillators may synchronize over time. If this behavior is unintended and system architects are unaware of it, this can create unintended behavior. In this case, an effort is put forward to detecting which oscillators are synchronized in a set and which are not.
 
 %The challenge addressed by this work is to model the networking problem TCP Global Synchronization in a discrete-event simulator. The problem is studied to understand the mathematic conditions that create this problem. This information is used to create a SST model and simulate it to identify metrics to detect that the problem has occurred in simulated systems.
 
 \section{Motivation} % Why does this work matter? Who cares? If you're successful, what difference does it make?
 
 
-
 \section{Prior work} % what does this build on?
-Will properly explain these works later:
-
-\begin{itemize}
-	\item Method of detecting synchronization by measuring peak synchronization in multiple signals \cite{biswas_2014}
-	\item Method of detecting synchronization by defining events (such as peaks in signals) and does not require the calculation of phase \cite{quian_2002}
-	\item Comparison of multiple current methods for phase synchronization \cite{yoshinaga_2022}
-\end{itemize}
-
-\section{Running the Model}
+Detecting synchronization in signals appears to be largely researched in the neuroscience field. Different methods for detecting synchronization have been researched. Biswas, Khamaru, and Majumdar research a method to determine a signal synchronization measurement based on measuring signal peaks \cite{biswas_2014}. Similarly, Quian, Kreuz, Grassberger, defined a method to analyzing signal synchronization through the use of defining events \cite{quian_2002}. The authors use peaks as their event in which to analyze for signal synchronization. They measure for synchronization by comparing when events occur in multiple signals. Their idea to focus on peaks in signal was used in the implementation for oscillator synchronization detection in discrete-event simulators.
 
 \section{Result} % conclusion/summary
 
-Two primary methods at the moment:
+Due to the \href{http://sst-simulator.org/}{Structural Simulation Toolkit} (SST) \href{https://en.wikipedia.org/wiki/Discrete-event_simulation}{discrete-event simulator's} (DES) limitations, it was not feasible to implement the algorithm for detecting oscillator synchronization in the DES. This is due to component frequencies being set at the beginning of the simulation and unable to be changed or offset during runtime. In this case, the current implementation was written in \href{https://www.python.org/about/}{Python} and we will theorize how it can be transferred to a discrete-event simulator. 
 
-Goal: Determine if the oscillators have the same frequency and are in phase.
-Assumption: The simulation keeps track of the oscillators frequency.\newline
+The current implementation for detecting oscillator synchronization is to sample when peaks occur in a set of signals during a sample of one period for all signals. This implementation assumes that the frequency of all signals are tracked and ignores signal amplitudes. Since frequency is given, we will assume that the set of oscillators being compared all share the same frequency. The goal now is to determine if they are all in phase or in anti-phase. The algorithm for synchronization detection works as follows:
 
-\noindent First method:
+\begin{enumerate}
+	\item During runtime, begin sampling the set of oscillators for one period. As they share the same frequency, one period is enough to determine if they are synchronized.
+	\item While sampling, when the first peak is encountered, store which oscillator it is associated with and the time it occurred. This will be the reference oscillator peak.
+	\item Continue sampling for the period and store each time the first peak has occurred for all other oscillators.
+	\item After sampling for one period, calculate the differences in time between the reference oscillator's first peak and all other oscillators' first peaks.
+	\item Multiply the differences in time by 2$\pi$ to give the phase difference between the reference oscillator and all other oscillators.
+	\item Compare the phases of the oscillators with each other to determine if they are in-phase (phase difference of zero) or anti-phase (phase difference of $\pi$).
+\end{enumerate}
 
-During a simulation, you can sample one period of data for a set of oscillators. The sampling will begin at the first peak that the simulation encounters, this will be the reference oscillator and its phase will be zero. As time steps forward, the time in which the first peak occurs for every oscillator in the period of time will be recorded. 
+The psuedocode for the algorithms for detecting oscillator synchronization:
+\begin{algorithm}
+	\caption{Oscillator Sampling}
+	\begin{algorithmic}[1]
+		\For{length(Period)}
+		\If{peaks detected == number of oscillators}
+		\State Break
+		\EndIf
+		\For{each signal}
+		\If{current signal's first peak has already been found}
+		\State Continue
+		\EndIf
+		\If{signal's value == signal's amplitude}
+		\If{reference peak found == false}
+		\State Store current signal as reference oscillator
+		\State Store current time as reference oscillator's first peak
+		\State Reference peak found equals true
+		\State Set current signals first peak found to be true
+		\State Increment peaks detected
+		\Else
+		\State Store current signals time subtracted from the time of the reference oscillator's first peak \State 		multiplied by 2$\pi$
+		\State Set current signals first peak found to be true
+		\State Increment peaks detected
+		\EndIf
+		\EndIf
+		\EndFor
+		\EndFor
+	\end{algorithmic} 
+\end{algorithm} 
 
-Once the period is over, the collected data is analyzed. The phase difference is calculated for each oscillator by subtracting the time in which its first peak occurred by the reference oscillator's peak. This value is multiped by two pi to give the phase angle.
+\begin{algorithm}
+	\caption{Oscillator Synchronization Comparison}
+	\begin{algorithmic}[2]
+		\State boiler
+	\end{algorithmic} 
+\end{algorithm} 
 
-With the array/vector of phase angles between every oscillator and the reference, you can compare the phase angles of all the oscillators in quadratic time (n squared). Oscillators are synchronized if the phase angle is zero (in-phase) or pi (anti-phase).\newline
+The algorithm was written in python and only tested on oscillators with simple harmonic motion such as sine and cosine function. It worked as intended but it has not been tested on more complicated oscillators.
 
-\noindent Second Method:
-
-Combine the oscillators and see if the amplitude is equal to the summation of all of the oscillators' amplitudes. This method may required converting analog signals to digital first. This can only detect global synchronization between the oscillators.
-
-W.I.P.
-	
-
-													
+								
 \section{Future Work}
-W.I.P.
+Due to time constraints, researching and coming up with an implementation for detecting oscillator synchronization was rushed. Due to this, the implementation explained above was only tested on oscillators with simple harmonic motion. The algorithm should be tested against more complicated oscillators that share the same frequencies to see if the metric is still accurate.
+
+A different promising direction is to look for research related to \href{https://en.wikipedia.org/wiki/Phase_synchronization}{phase synchronization}, phase clustering, and \href{https://en.wikipedia.org/wiki/Phase_correlation}{phase correlation}. These terms all relate to calculating the phases of signals and comparing them with other signals to extract information about the pair. Similar to the above, researching these measurements was cut short due to time constraints.
 
 \bibliographystyle{plain}
 \bibliography{biblio}

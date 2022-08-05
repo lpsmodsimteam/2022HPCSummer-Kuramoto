@@ -5,6 +5,8 @@
     Program adds up the signals and checks that all states have amplitude 0 or the summation of all signal's amplitudes. 
     
     Runs at O(n + m) where n is the number of oscillators and m is the clock boundary.
+
+    Naive implementation: Only works on up to 9 oscillators in a set.
 '''
 
 # Open 'simulated' oscillator data and read it into the signals list.

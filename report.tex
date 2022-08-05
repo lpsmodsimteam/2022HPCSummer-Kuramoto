@@ -38,16 +38,16 @@
 \begin{document}
 
     % https://stackoverflow.com/a/3408428/1164295
-    \begin{minipage}[h]{\textwidth}
+    %\begin{minipage}[h]{\textwidth}
         \title{2022 Future Computing Summer Internship Project:\\Detecting if Simulated Oscillators are Following the Kuramoto Model by Determining if the Oscillators Experience Synchronization}
-        \author{Nicholas Schantz}
+        \author{Nicholas Schantz\thanks{nschantz3@gatech.edu}}
         \date{\today}
             \maketitle
         \begin{abstract}
         	The primary focus in this research is to find a metric that determines if a set of similar oscillators are synchronized or not. The \href{https://en.wikipedia.org/wiki/Kuramoto_model}{Kuramoto Model} is a mathematical model that describes how coupled oscillators may synchronize over time. If a system architect creates a system involving coupled oscillators and are unaware of this model, unintended behavior will occur if the oscillators synchronize over time. In this case, effort is put forward to creating an algorithm that results in a metric to detect which oscillators in a set are synchronized and which are not. The current algorithm results in a metric that measures the difference in time between the first peak in \href{https://en.wikipedia.org/wiki/Electronic_oscillator#Harmonic_oscillators}{harmonic oscillators} and a reference harmonic oscillator of the same frequency. The difference in time is multiplied by 2$\pi$ to measure the phase difference between the set of oscillators and the reference oscillators. Detecting synchronization is done by comparing the phase difference between the oscillators. If the oscillators are in-phase (phase difference of zero) or anti-phase (phase difference of $\pi$) and share the same frequency, they are synchronized. More work needs to be conducted regarding expanding this metric, testing its correctness, or determining a more effective metric for detecting oscillator synchronization.
 
         \end{abstract}
-    \end{minipage}
+    %\end{minipage}
 
 \ \\
 
@@ -80,18 +80,19 @@ The current implementation for detecting oscillator synchronization is to sample
 \end{enumerate}
 
 The psuedocode for the algorithms for detecting oscillator synchronization:
+Algorithm one is what will analyze the oscillator's value over a period of time to detect each of the oscillator's first peak. 
 \begin{algorithm}[H]
 	\caption{Oscillator Sampling}
 	\begin{algorithmic}[1]
-		\For{length(Period)}
-		\If{peaks detected equals number of oscillators}
+		\For{timestep in length of period}
+		\If{peaks detected equals number of oscillators in set}
 		\State Break
 		\EndIf
 		\For{each signal}
 		\If{current signal's first peak has already been found}
 		\State Continue
 		\EndIf
-		\If{signal's value equals signal's amplitude}
+		\If{signal's current value equals signal's amplitude}
 		\If{reference peak found equals false}
 		\State Store current signal as reference oscillator
 		\State Store current time as reference oscillator's first peak

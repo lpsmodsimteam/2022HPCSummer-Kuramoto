@@ -31,7 +31,7 @@ time = np.arange(start_time, end_time, 1/sampling_rate)
 
 # Create simple harmonic oscillators
 sine_wave = amplitude * np.sin(2 * np.pi * frequency * time + theta) 
-cos_wave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
+cos_wave = amplitude * np.cos(2 * np.pi * frequency * time + theta)
 
 # Pre-determine the amplitude of the oscillators before analyzing them.
 sine_peak = max(sine_wave)
@@ -123,8 +123,9 @@ for curr_signal in range(num_signals):
     # Compare the oscillator's phase difference with oscillators stored after it.
     # This prevents oscillator A comparing with Oscillator B and then Oscillator B comparing with Oscillator A
     for i in range(curr_signal, num_signals - 1):
-        # TODO, check for antiphase as well.
-        if signals_phase_diff[curr_signal] == signals_phase_diff[i + 1]:
+
+        # Check if phase difference is equal (in-phase) or if phase difference is pi (anti-phase)
+        if signals_phase_diff[curr_signal] == signals_phase_diff[i + 1] or (signals_phase_diff[curr_signal] + np.pi) == signals_phase_diff[i + 1]:
             print(f"Signal {curr_signal} is synchronized with Signal {i + 1}")
         else:
             print(f"Signal {curr_signal} is not synchronized with Signal {i + 1}")

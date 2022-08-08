@@ -19,6 +19,7 @@
 	postbreak=\mbox{\textcolor{black}{$\hookrightarrow$}\space},
 }
 
+
 % margins of 1 inch:
 \setlength{\topmargin}{-.5in}
 \setlength{\textheight}{9.5in}
@@ -62,7 +63,7 @@ The challenge addressed by this work is to determine a correct and efficient way
 This work is helpful for networking and quantum computing. For networking, it is useful to determine if communication from multiple clients are synchronously sending messages or not. If a large number of clients transfer messages synchronously, then the problem such as \href{https://en.wikipedia.org/wiki/Thundering_herd_problem}{thundering herd} can occur in the network. In this case, it is useful for network architects to be able to simulate network traffic and determine if the clients' traffic is synchronized. In \href{https://en.wikipedia.org/wiki/Quantum_computing}{quantum computing}, if coupled oscillators are used in the production of quantum systems then they can potentially follow the Kuramoto Model and synchronize over time. It will be useful to measure and detect for oscillator synchronization if it is undesired behavior.
 
 \section{Prior work} % what does this build on?
-Detecting synchronization in signals appears to be largely researched in the neuroscience field. Different methods for detecting synchronization have been researched. Biswas, Khamaru, and Majumdar research a method to determine a signal synchronization measurement based on measuring signal peaks \cite{biswas_2014}. Similarly, Quian, Kreuz, Grassberger, define a method to analyzing signal synchronization by looking at events in signals\cite{quian_2002}. The authors use peaks as their events in which to analyze for signal synchronization. They measure for synchronization by comparing when events occur in multiple signals. Their idea to focus on peaks in signal was used in the implementation for oscillator synchronization detection in discrete-event simulators.
+Detecting synchronization in signals appears to be largely researched in the neuroscience field. Different methods for detecting synchronization have been researched. Biswas, Khamaru, and Majumdar research a method to determine a signal synchronization measurement based on measuring signal peaks \cite{biswas_2014}. Similarly, Quian, Kreuz, Grassberger, define a method to analyzing signal synchronization by looking at events in signals \cite{quian_2002}. The authors use peaks as their events in which to analyze for signal synchronization. They measure for synchronization by comparing when events occur in multiple signals. Their idea to focus on peaks in signals was used in the implementation for oscillator synchronization detection intended for discrete-event simulators.
 
 \section{Result} % conclusion/summary
 
